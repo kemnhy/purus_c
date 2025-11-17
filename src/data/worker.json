@@ -1,0 +1,67 @@
+[
+  {
+    "id": 101,
+    "name": "이깨끗",
+    "rating": 4.9,
+    "email": "clean101@purus.com",
+    "addr": "대구광역시 수성구",
+    "phone": "010.1234.5678",
+    "startDate": "2019-10-13",
+    "payment": "2,150,000",
+    "reservation": 38,
+    "payout": 15,
+    "complete": 33
+  },
+  {
+    "id": 102,
+    "name": "박깨끗",
+    "rating": 5.0,
+    "email": "clean102@purus.com",
+    "addr": "대구광역시 수성구",
+    "phone": "010.1234.5678",
+    "startDate": "2019-10-13",
+    "payment": "1,150,000",
+    "reservation": 25,
+    "payout": 15,
+    "complete": 15
+  },
+  {
+    "id": 103,
+    "name": "최깨끗",
+    "rating": 4.8,
+    "email": "clean103@purus.com",
+    "addr": "대구광역시 수성구",
+    "phone": "010.1234.5678",
+    "startDate": "2019-10-13",
+    "payment": "2,150,000",
+    "reservation": 38,
+    "payout": 15,
+    "complete": 33
+  },
+  {
+    "id": 104,
+    "name": "김깨끗",
+    "rating": 4.7,
+    "email": "clean104@purus.com",
+    "addr": "대구광역시 수성구",
+    "phone": "010.1234.5678",
+    "startDate": "2019-10-13",
+    "payment": "1,850,000",
+    "reservation": 20,
+    "payout": 15,
+    "complete": 18
+  },
+  {
+    "id": 105,
+    "name": "진깨끗",
+    "rating": 5.0,
+    "email": "clean105@purus.com",
+    "addr": "대구광역시 수성구",
+    "phone": "010.1234.5678",
+    "startDate": "2019-10-13",
+    "payment": "2,150,000",
+    "reservation": 38,
+    "payout": 15,
+    "complete": 33
+  }
+]
