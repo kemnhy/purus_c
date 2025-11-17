@@ -8,14 +8,15 @@
     "service": "제빙기 정기 클리닝",
     "worker": "이깨끗",
     "phone": "010.1234.5678",
-    "date": "2025-11-10",
+    "date": "2025-11-20",
     "price": "90,000",
     "status": "waiting",
-    "time": "15:00",
+    "time": "PM 15:00",
     "rating": 5,
     "coupon": "waiting",
     "review": "전문가의 손길이 느껴졌습니다. 관리가 확실하네요!",
-    "reserDate": "2025-10-30"
+    "reserDate": "2025-10-30",
+    "notice": "최대한 빠른 작업 부탁드립니다."
   },
   {
     "id": 2,
@@ -29,11 +30,12 @@
     "date": "2025-11-20",
     "price": "95,000",
     "status": "waiting",
-    "time": "17:00",
+    "time": "PM 17:00",
     "rating": 5,
     "coupon": "waiting",
     "review": "생각보다 빨리 끝내주시고 결과도 깔끔했어요.",
-    "reserDate": "2025-11-03"
+    "reserDate": "2025-11-03",
+    "notice": ""
   },
   {
     "id": 3,
@@ -44,14 +46,15 @@
     "service": "제빙기 정기 클리닝",
     "worker": "이깨끗",
     "phone": "010.1234.5678",
-    "date": "2025-11-15",
+    "date": "2025-11-20",
     "price": "80,000",
     "status": "waiting",
-    "time": "20:00",
+    "time": "PM 20:00",
     "rating": 5,
     "coupon": "waiting",
     "review": "제빙기 안쪽까지 꼼꼼하게 청소해주셔서 믿음이 갑니다.",
-    "reserDate": "2025-11-01"
+    "reserDate": "2025-11-01",
+    "notice": "매장 도착 후 전화주세요."
   },
   {
     "id": 4,
@@ -65,11 +68,12 @@
     "date": "2025-11-20",
     "price": "100,000",
     "status": "complete",
-    "time": "11:00",
+    "time": "AM 11:00",
     "rating": 5,
     "coupon": "complete",
     "review": "청소 후 얼음이 훨씬 깨끗해졌어요! 관리 주기마다 맡기려구요.",
-    "reserDate": "2025-10-28"
+    "reserDate": "2025-10-28",
+    "notice": ""
   },
   {
     "id": 5,
@@ -83,10 +87,11 @@
     "date": "2025-11-20",
     "price": "100,000",
     "status": "complete",
-    "time": "09:00",
+    "time": "AM 09:00",
     "rating": 5,
     "coupon": "complete",
     "review": "청소 후 얼음이 훨씬 깨끗해졌어요! 관리 주기마다 맡기려구요.",
-    "reserDate": "2025-11-08"
+    "reserDate": "2025-11-08",
+    "notice": ""
   }
 ]

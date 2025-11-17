@@ -22,7 +22,7 @@
     <WorkerNotice />
     <!-- 메인 > 라우터 불러옴 -->
     <main>
-      <router-view></router-view>
+      <router-view class="px-10 py-6"></router-view>
     </main>
     <!-- 하단고정메뉴 -->
     <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-[#f0faff] h-17 z-10">
