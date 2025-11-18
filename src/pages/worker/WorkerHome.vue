@@ -37,7 +37,7 @@
         </button>
       </div>
       <!-- 오늘의 예약 -->
-      <div v-if="reservationTab === 'today'" class="overflow-y-auto max-h-[60vh]">
+      <div v-if="reservationTab === 'today'" class="overflow-y-auto max-h-[61vh]">
         <!-- 남은 예약 / 전체 예약 -->
         <div>
           <p class="py-2 text-[14px] text-[#888888] font-bold text-right">
