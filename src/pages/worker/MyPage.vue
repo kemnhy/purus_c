@@ -1,6 +1,5 @@
 <template>
   <div class="w-full max-w-[440px] mx-auto min-h-screen bg-white">
-
     <!-- 상단 네비 -->
     <header class="flex justify-between items-center px-5 py-4">
       <div class="relative"></div>
@@ -11,20 +10,17 @@
       <img
         src="/public/images/Editinfo.png"
         alt="기사 프로필"
-        class="w-[139px] h-[139px] rounded-2xl object-cover"
-      />
-      <h2 class="mt-3 text-[30px] font-semibold text-[#296af1]">
-        이깨끗기사님
-      </h2>
+        class="w-[139px] h-[139px] rounded-2xl object-cover" />
+      <h2 class="mt-3 text-[30px] font-semibold text-[#296af1]">이깨끗기사님</h2>
     </section>
 
     <!-- 3개 메뉴 버튼 -->
-    <section
-      class="bg-[#1667F2] mx-5 mt-6 rounded-2xl text-white flex justify-around py-4"
-    >
+    <section class="bg-[#1667F2] mx-5 mt-6 rounded-2xl text-white flex justify-around py-4">
       <div class="flex flex-col items-center">
-        <i class="fa-regular fa-pen-to-square text-[22px]"></i>
-        <p class="mt-1 text-[14px]">내정보 수정</p>
+        <div class="flex flex-col items-center" @click="$router.push('/worker/dashboard/editinfo')">
+          <i class="fa-regular fa-pen-to-square text-[22px]"></i>
+          <p class="mt-1 text-[14px]">내정보 수정</p>
+        </div>
       </div>
 
       <div class="flex flex-col items-center relative">
@@ -32,8 +28,7 @@
         <p class="mt-1 text-[14px]">전체 내역 조회</p>
 
         <span
-          class="absolute -top-2 right-5 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex justify-center items-center"
-        >
+          class="absolute -top-2 right-5 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex justify-center items-center">
           36
         </span>
       </div>
@@ -64,28 +59,23 @@
     </section>
 
     <!-- 고객센터 모달 -->
-<div
-  v-if="showCallModal"
-  class="fixed inset-0 bg-black/60 backdrop-blur-[2px] flex justify-center items-center z-50"
-  @click.self="closeCallModal"
->
-  <div class="bg-white w-[300px] rounded-2xl shadow-lg text-center px-5 py-6">
-    <p class="text-[20px] text-[#000000]">고객센터</p>
+    <div
+      v-if="showCallModal"
+      class="fixed inset-0 bg-black/60 backdrop-blur-[2px] flex justify-center items-center z-50"
+      @click.self="closeCallModal">
+      <div class="bg-white w-[300px] rounded-2xl shadow-lg text-center px-5 py-6">
+        <p class="text-[20px] text-[#000000]">고객센터</p>
 
-    <p class="mt-2 text-[30px] font-extrabold tracking-wide">
-      010.1234.5678
-    </p>
+        <p class="mt-2 text-[30px] font-extrabold tracking-wide">010.1234.5678</p>
 
-    <button
-      class="mt-4 w-full py-3 rounded-full bg-[#1667F2] text-white text-[16px] font-semibold flex justify-center items-center gap-2 shadow-md"
-      @click="callCenter"
-    >
-      <i class="fa-solid fa-phone text-[16px]"></i>
-      전화 연결
-    </button>
-  </div>
-</div>
-
+        <button
+          class="mt-4 w-full py-3 rounded-full bg-[#1667F2] text-white text-[16px] font-semibold flex justify-center items-center gap-2 shadow-md"
+          @click="callCenter">
+          <i class="fa-solid fa-phone text-[16px]"></i>
+          전화 연결
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -105,4 +95,5 @@ const closeCallModal = () => {
 const callCenter = () => {
   window.location.href = "tel:01012345678";
 };
+
 </script>
