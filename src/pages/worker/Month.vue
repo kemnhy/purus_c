@@ -1,5 +1,9 @@
 <template>
   <!-- 이달의 청소 -->
+   <Calendar />
 </template>
 
-<script setup></script>
+<script setup>
+import Calendar from '@/components/worker/Calendar.vue';
+
+</script>
