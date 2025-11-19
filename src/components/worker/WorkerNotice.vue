@@ -26,7 +26,7 @@
         <p class="text-[20px] font-semibold">새로운 알림</p>
         <span
           v-if="notices"
-          class="text-[14px] px-3 bg-[#F12929] rounded-full text-white"
+          class="text-[14px] px-1.5 bg-[#F12929] rounded-full text-white"
         >
           {{ notices.length }}
         </span>
@@ -34,7 +34,7 @@
       <!-- 알림 리스트 -->
       <div
         @click="goPath(notice)"
-        class="flex gap-4 items-center"
+        class="flex gap-4 items-center cursor-pointer"
         v-for="notice in notices"
         :key="notice.id"
       >

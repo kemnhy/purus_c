@@ -1,71 +1,102 @@
 <template>
   <!-- 완료된 예약 상세 -->
-  <div>
+  <div class="mb-[68px]">
     <!-- 지도 API -->
     <!-- 지도를 표시할 div 입니다 -->
     <div id="map" class="w-full h-[250px]"></div>
     <!-- 시간 / 상태 -->
-    <div class="flex items-center justify-between border-b border-[#f1f1f1] py-5">
-      <p
-        :class="
-          reservationDetail.status === 'waiting'
-            ? 'text-[#296af1] font-bold text-[18px]'
-            : 'text-[#888888]'
-        ">
+    <div
+      class="flex items-center justify-between border-b border-[#f1f1f1] py-5"
+    >
+      <p class="text-[#296af1] font-bold text-[18px]">
         {{ reservationDetail.date }}
         {{ reservationDetail.time }}
       </p>
-      <p
-        :class="
-          reservationDetail.status === 'waiting'
-            ? 'text-[#888888] font-bold text-[16px]'
-            : 'text-[#296af1]'
-        ">
-        {{ reservationDetail.status === "waiting" ? "청소 예정" : "청소 완료" }}
+      <p class="text-[#296af1] font-bold">
+        청소완료
         <i class="fa-solid fa-circle-check"></i>
       </p>
     </div>
     <!-- 상세 내용 -->
-    <div>
-      <!-- 고객 정보 -->
-      <div class="flex items-center justify-between mt-6 mb-3">
-        <h3 class="text-[#092857] font-bold text-[18px]">고객 정보</h3>
-        <i class="fa-solid fa-phone text-[#555555]"></i>
+    <div class="flex flex-col gap-10 py-4">
+      <!-- 섹션1 / 고객정보 -->
+      <div>
+        <div class="flex justify-between">
+          <h5 class="text-lg font-bold text-[#092857] pb-4">고객정보</h5>
+          <i class="fa-solid fa-phone opacity-60" @click="openCallModal"></i>
+        </div>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">이름</span
+          ><span class="font-bold">{{ reservationDetail.name }}</span>
+        </div>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">전화번호</span
+          ><span class="font-bold">{{ reservationDetail.phone }}</span>
+        </div>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">매장명</span
+          ><span class="font-bold">{{ reservationDetail.cafename }}</span>
+        </div>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">주소</span
+          ><span class="font-bold">{{ reservationDetail.addr }}</span>
+        </div>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">요청사항</span
+          ><span class="font-bold">{{ reservationDetail.notice }}</span>
+        </div>
       </div>
-      <ul class="flex flex-col gap-2">
-        <li class="flex justify-between">
-          <p class="text-[#555555]">이름</p>
-          <p class="text-black font-semibold">{{ reservationDetail.name }}</p>
-        </li>
-        <li class="flex justify-between">
-          <p class="text-[#555555]">전화번호</p>
-          <p class="text-black font-semibold">{{ reservationDetail.phone }}</p>
-        </li>
-        <li class="flex justify-between">
-          <p class="text-[#555555]">매장명</p>
-          <p class="text-black font-semibold">{{ reservationDetail.cafename }}</p>
-        </li>
-        <li class="flex justify-between">
-          <p class="text-[#555555]">주소</p>
-          <p class="text-black font-semibold">{{ reservationDetail.addr }}</p>
-        </li>
-        <li class="flex justify-between">
-          <p class="text-[#555555]">요청사항</p>
-          <p class="text-black font-semibold">{{ reservationDetail.notice }}</p>
-        </li>
-      </ul>
-      <!-- 서비스 내역 -->
-      <h3 class="text-[#092857] font-bold text-[18px] mt-6 mb-3">서비스 내역</h3>
-      <ul class="flex flex-col gap-2">
-        <li class="flex justify-between">
-          <p class="text-[#555555]">제빙기 모델명</p>
-          <p class="text-black font-semibold">{{ reservationDetail.model }}</p>
-        </li>
-        <li class="flex justify-between">
-          <p class="text-[#555555]">이용서비스</p>
-          <p class="text-black font-semibold">{{ reservationDetail.service }}</p>
-        </li>
-      </ul>
+      <!-- 섹션2 / 서비스 내역 -->
+      <div>
+        <h5 class="text-lg font-bold text-[#092857] pb-4">서비스 내역</h5>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">제빙기 모델명</span
+          ><span class="font-bold">{{ reservationDetail.model }}</span>
+        </div>
+        <div class="flex w-full justify-between">
+          <span class="opacity-60">이용서비스</span
+          ><span class="font-bold">{{ reservationDetail.service }}</span>
+        </div>
+      </div>
+      <!-- 섹션3-1 / 서비스 상세 -->
+      <div>
+        <h5 class="text-lg font-bold text-[#092857] pb-4">서비스 상세</h5>
+        <p>{{ serviceText }}</p>
+      </div>
+      <!-- 섹션3-2 / 첨부한 파일 -->
+      <div>
+        <h5 class="text-lg font-bold text-[#092857] pb-4">첨부한 파일</h5>
+        <img :src="file" class="w-[50%] rounded" />
+      </div>
+      <!-- 섹션4 / 서명 -->
+      <div>
+        <h5 class="text-lg font-bold text-[#092857] pb-4">고객 확인 서명</h5>
+        <img src="/public/images/sign.png" alt="sign" />
+      </div>
+    </div>
+    <!-- 고객통화 모달 -->
+    <div
+      v-if="showCallModal"
+      class="fixed inset-0 bg-black/60 backdrop-blur-[2px] flex justify-center items-center z-50"
+      @click="showCallModal = false"
+    >
+      <div
+        class="bg-white w-[300px] rounded-2xl shadow-lg text-center px-5 py-6"
+      >
+        <p class="text-[20px] text-[#000000]">통화하기</p>
+
+        <p class="mt-2 text-[30px] font-extrabold tracking-wide">
+          010.1234.5678
+        </p>
+
+        <button
+          class="mt-4 w-full py-3 rounded-full bg-[#1667F2] text-white text-[16px] font-semibold flex justify-center items-center gap-2 shadow-md"
+          @click="callCenter"
+        >
+          <i class="fa-solid fa-phone text-[16px]"></i>
+          전화 연결
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -77,6 +108,17 @@ import customerDataRaw from "@/data/customer.json";
 
 const route = useRoute();
 const customerData = ref(customerDataRaw);
+const showCallModal = ref(false);
+
+// 통화모달 띄우기
+const openCallModal = () => {
+  showCallModal.value = true;
+};
+
+// textarea 받아오기
+const serviceText = route.query.text;
+// 파일 받아오기const text = route.query.text;
+const file = route.query.file; // base64 이미지
 
 // route.params.id를 사용해서 reservationDetail 가져오기
 const reservationDetail = computed(() =>
@@ -107,7 +149,11 @@ onMounted(() => {
     const imageSrc = "/images/location.png";
     const imageSize = new kakao.maps.Size(20, 30);
     const imageOption = { offset: new kakao.maps.Point(15, 40) };
-    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+    const markerImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      imageSize,
+      imageOption
+    );
 
     // 주소로 좌표 검색 후 마커 표시
     geocoder.addressSearch(reservationDetail.value.addr, (result, status) => {

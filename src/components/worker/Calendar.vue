@@ -1,19 +1,19 @@
 <template>
-  <div class="calendar w-full h-full py-[50px]">
+  <div class="calendar mt-[50px] w-full h-full py-[50px] px-[20px] shadow-[1px_4px_30px_rgba(0,0,0,0.11)] rounded-[30px]">
     <!-- 10월, 좌우 버튼 -->
-    <div class="header flex justify-between px-[24px] items-center">
-      <span class="text-[#092857] text-[22px] font-bold"
+    <div class="header flex justify-between px-[26px] items-center">
+      <span class="text-[#092857] text-[24px] font-bold"
         >{{ month + 1 }}월</span
       >
-      <div class="text-[20px] flex items-center gap-2 opacity-70">
-        <i class="fa-solid fa-angle-left" @click="prevMonth()"></i
-        ><i class="fa-solid fa-angle-right" @click="nextMonth()"></i>
+      <div class="text-[22px] flex items-center gap-2 opacity-70">
+        <i class="fa-solid fa-angle-left cursor-pointer" @click="prevMonth()"></i
+        ><i class="fa-solid fa-angle-right cursor-pointer" @click="nextMonth()"></i>
       </div>
     </div>
     <!-- 달력 전체 -->
     <div class="py-[50px]">
       <!-- 요일 -->
-      <div class="grid grid-cols-7 text-center text-lg font-semibold">
+      <div class="grid grid-cols-7 text-center text-lg">
         <div class="text-red-500">일</div>
         <div>월</div>
         <div>화</div>
@@ -41,7 +41,7 @@
             ></div>
             <!-- 날짜 숫자 -->
             <span
-              class="z-20 relative font-semibold"
+              class="z-20 relative"
               :class="day.marking?.schedule ? 'text-white' : 'text-black'"
               >{{ day.date }}</span
             >
@@ -102,6 +102,25 @@ const marking = [
   { date: "2025-11-25", schedule: "am" },
   { date: "2025-11-26", schedule: "am" },
   { date: "2025-11-28", schedule: "am,pm" },
+//   **************12월**************************
+  { date: "2025-12-02", schedule: "am,pm" },
+  { date: "2025-12-03", schedule: "am,pm" },
+  { date: "2025-12-04", schedule: "am,pm" },
+  { date: "2025-12-05", schedule: "am" },
+  { date: "2025-12-08", schedule: "am" },
+  { date: "2025-12-09", schedule: "am,pm" },
+  { date: "2025-12-10", schedule: "am,pm" },
+  { date: "2025-12-11", schedule: "am,pm" },
+  { date: "2025-12-12", schedule: "am,pm" },
+  { date: "2025-12-15", schedule: "pm" },
+  { date: "2025-12-16", schedule: "pm" },
+  { date: "2025-12-18", schedule: "am" },
+  { date: "2025-12-19", schedule: "am,pm" },
+  { date: "2025-12-22", schedule: "pm" },
+  { date: "2025-12-24", schedule: "am,pm" },
+  { date: "2025-12-25", schedule: "am" },
+  { date: "2025-12-26", schedule: "am" },
+  { date: "2025-12-30", schedule: "am,pm" },
   
 ];
 

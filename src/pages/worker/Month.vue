@@ -26,7 +26,7 @@
     </div>
     <!-- 예약 목록 -->
     <!-- 전체 예약 -->
-    <div v-if="(calendarTab = 'list')" class="overflow-y-auto max-h-[61vh]">
+    <div v-if="calendarTab === 'list'" class="overflow-y-auto max-h-[61vh] pt-[50px]">
       <!-- 전체 예약 목록 -->
       <div
         v-for="customer in dataCustomer"
@@ -109,12 +109,13 @@
         </div>
       </div>
     </div>
+    <!-- 달력 -->
+    <Calendar v-if="calendarTab === 'calendar'" />
   </div>
-   <Calendar />
 </template>
 
 <script setup>
-import Calendar from '@/components/worker/Calendar.vue';
+import Calendar from "@/components/worker/Calendar.vue";
 import customerData from "@/data/customer.json";
 import { ref } from "vue";
 
@@ -122,5 +123,4 @@ import { ref } from "vue";
 const dataCustomer = ref(customerData);
 
 const calendarTab = ref("list");
-
 </script>

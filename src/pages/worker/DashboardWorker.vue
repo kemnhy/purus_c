@@ -11,17 +11,19 @@
       <div>
         <button @click="goBack" v-if="$route.path !== '/worker/dashboard/home'">
           <!-- 홈이 아닐때만 보이기 -->
-          <i class="fa-solid fa-angle-left text-xl text-[#092857] cursor-pointer"></i>
+          <i
+            class="fa-solid fa-angle-left text-xl text-[#092857] cursor-pointer"
+          ></i>
         </button>
       </div>
       <!-- 알림 아이콘 -->
       <div @click="openNotice = true" class="relative">
         <i class="fa-solid fa-bell text-[#092857] text-xl cursor-pointer"></i>
         <span
-          v-if="notice"
-          class="w-3 h-3 bg-[#F12929] absolute rounded-full text-white"
+          v-if="notices"
+          class="text-[12px] px-1.5 bg-[#F12929] absolute rounded-full text-white top-[-6px] left-[11px]"
         >
-          {{}}
+          {{ notices.length }}
         </span>
       </div>
     </header>
@@ -90,4 +92,50 @@ const goBack = () => {
 
 // 알림창 열기
 const openNotice = ref(false);
+
+// 알림 목록 더미
+const notices = [
+  {
+    id: 1,
+    message: "새로운 예약이 있습니다!",
+    desc: "오늘의 예약을 확인해주세요.",
+    icon: "fa-solid fa-bell",
+    name: "WorkerHome",
+  },
+  {
+    id: 2,
+    message: "새로운 리뷰가 있습니다!",
+    desc: "마이페이지에서 확인해주세요.",
+    icon: "fa-solid fa-thumbs-up",
+    name: "MyPage",
+  },
+  {
+    id: 3,
+    message: "새로운 예약이 있습니다!",
+    desc: "오늘의 예약을 확인해주세요.",
+    icon: "fa-solid fa-bell",
+    name: "WorkerHome",
+  },
+  {
+    id: 4,
+    message: "새로운 예약이 있습니다!",
+    desc: "오늘의 예약을 확인해주세요.",
+    icon: "fa-solid fa-bell",
+    name: "WorkerHome",
+  },
+  {
+    id: 5,
+    message: "새로운 리뷰가 있습니다!",
+    desc: "마이페이지에서 확인해주세요.",
+    icon: "fa-solid fa-thumbs-up",
+    name: "MyPage",
+  },
+  {
+    id: 6,
+    message: "오늘은 정산일 입니다!",
+    desc: "마이페이지에서 확인해주세요.",
+    icon: "fa-solid fa-dollar-sign",
+    name: "MyPage",
+  },
+];
 </script>
