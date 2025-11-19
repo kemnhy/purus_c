@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex justify-center bg-white">
-    <!-- 440 고정 모바일 레이아웃 -->
+    
     <div class="w-full max-w-[440px] min-h-screen bg-white flex flex-col items-center pt-10">
       <!-- 탭 메뉴 -->
       <div class="w-full flex justify-center border-b border-gray-300">
