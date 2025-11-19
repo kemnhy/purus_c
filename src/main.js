@@ -6,3 +6,4 @@ import router from "./router";
 import VueSignaturePad from 'vue-signature-pad';
 
 createApp(App).use(router).use(VueSignaturePad).mount("#app");
+

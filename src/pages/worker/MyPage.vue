@@ -1,75 +1,63 @@
 <template>
-  <div class="w-full max-w-[440px] mx-auto min-h-screen bg-white">
+  <div class="w-full max-w-[440px] mx-auto bg-white">
     <!-- 상단 네비 -->
-    <header class="flex justify-between items-center px-5 py-4">
+    <!-- <header class="flex justify-between items-center px-5 py-4">
       <div class="relative"></div>
-    </header>
+    </header> -->
 
     <!-- 프로필 -->
     <section class="flex flex-col justify-center items-center mt-6">
       <img
-        src="/public/images/Editinfo.png"
+        src="/images/Editinfo.png"
         alt="기사 프로필"
-        class="w-[139px] h-[139px] rounded-2xl object-cover"
-      />
-      <h2 class="mt-3 text-[30px] font-semibold text-[#296af1]">
-        이깨끗기사님
-      </h2>
+
+        class="w-36 h-36 rounded-2xl object-cover" />
+      <h2 class="mt-3 text-[30px] font-semibold text-[#296af1]">{{ dataWorker[0].name }}기사님</h2>
     </section>
 
     <!-- 3개 메뉴 버튼 -->
-    <section
-      class="bg-[#1667F2] mx-5 mt-6 rounded-2xl text-white flex justify-around py-4"
-    >
+    <section class="bg-[#296af1] mt-6 rounded-2xl text-white flex justify-around py-4">
       <div class="flex flex-col items-center">
         <div
-          class="flex flex-col items-center"
-          @click="$router.push('/worker/dashboard/editinfo')"
-        >
-          <i class="fa-regular fa-pen-to-square text-[22px]"></i>
-          <p class="mt-1 text-[14px]">내정보 수정</p>
+          class="flex flex-col items-center gap-2"
+          @click="$router.push('/worker/dashboard/editinfo')">
+          <i class="fa-solid fa-pen-to-square text-[22px] mt-1"></i>
+          <p class="text-[14px]">내정보 수정</p>
         </div>
       </div>
 
-      <div class="flex flex-col items-center relative">
-        <i class="fa-regular fa-clipboard text-[22px]"></i>
-        <p class="mt-1 text-[14px]">전체 내역 조회</p>
+      <div class="flex flex-col items-center relative gap-2">
+        <i class="fa-solid fa-table-list text-[22px] mt-1"></i>
+        <p class="text-[14px]">전체 내역 조회</p>
 
-        <span
-          class="absolute -top-2 right-5 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex justify-center items-center"
-        >
+        <!-- <span
+          class="absolute -top-2 right-5 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex justify-center items-center">
           36
-        </span>
+        </span> -->
       </div>
 
       <!-- 고객센터 버튼 -->
-      <div class="flex flex-col items-center" @click="openCallModal">
-        <i class="fa-solid fa-headset text-[22px]"></i>
-        <p class="mt-1 text-[14px]">고객센터</p>
+      <div class="flex flex-col items-center gap-2 mr-1" @click="openCallModal">
+        <i class="fa-solid fa-headset text-[22px] mt-1"></i>
+        <p class="text-[14px]">고객센터</p>
       </div>
     </section>
 
     <!-- 정보 카드 -->
-    <section
-      class="bg-[#E8F4FF] mx-5 mt-6 rounded-2xl px-5 py-4 text-[#092857]"
-    >
-      <div
-        class="flex justify-between py-3 border-b border-gray-300 text-[18px]"
-      >
+    <section class="bg-[#E8F4FF] mt-6 rounded-2xl px-5 py-5 text-[#092857]">
+      <div class="flex justify-between pb-3 border-b border-[#dddddd] text-[18px]">
         <p class="text-[#888888]">나의 소득</p>
-        <p class="font-semibold">2,150,000원</p>
+        <p class="font-semibold">{{ dataWorker[0].payment }}원</p>
       </div>
 
-      <div
-        class="flex justify-between py-3 border-b border-gray-300 text-[18px]"
-      >
-        <p class="text-[#888888]">10월 완료 건수</p>
-        <p class="font-semibold">33건</p>
+      <div class="flex justify-between py-3 border-b border-[#dddddd] text-[18px]">
+        <p class="text-[#888888]">이달의 완료 건수</p>
+        <p class="font-semibold">{{ dataWorker[0].complete }}건</p>
       </div>
 
-      <div class="flex justify-between py-3 text-[18px]">
+      <div class="flex justify-between pt-3 text-[18px]">
         <p class="text-[#888888]">평점</p>
-        <p class="font-semibold">4.9점</p>
+        <p class="font-semibold">{{ dataWorker[0].rating }}점</p>
       </div>
     </section>
 
@@ -101,6 +89,10 @@
 
 <script setup>
 import { ref } from "vue";
+import workerData from "@/data/worker.json";
+
+// 기사 더미데이터
+const dataWorker = ref(workerData);
 
 const showCallModal = ref(false);
 
@@ -112,4 +104,7 @@ const closeCallModal = () => {
   showCallModal.value = false;
 };
 
+const callCenter = () => {
+  window.location.href = "tel:01012345678";
+};
 </script>

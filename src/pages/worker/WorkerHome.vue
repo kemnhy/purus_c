@@ -37,7 +37,7 @@
         </button>
       </div>
       <!-- 오늘의 예약 -->
-      <div v-if="reservationTab === 'today'" class="overflow-y-auto max-h-[61vh]">
+      <div v-if="reservationTab === 'today'" class="overflow-y-auto max-h-[60vh]">
         <!-- 남은 예약 / 전체 예약 -->
         <div>
           <p class="py-2 text-[14px] text-[#888888] font-bold text-right">
@@ -91,7 +91,7 @@
         </div>
       </div>
       <!-- 전체 예약 -->
-      <div v-if="reservationTab === 'all'" class="overflow-y-auto max-h-[61vh]">
+      <div v-if="reservationTab === 'all'" class="overflow-y-auto max-h-[59vh]">
         <!-- 날짜 선택 -->
         <!-- 월 선택 -->
         <div class="flex items-center justify-center gap-2 py-3">
@@ -121,10 +121,11 @@
         </div>
         <!-- 전체 예약 목록 -->
         <div
+          @click="goDetail(customer.id)"
           v-if="selectedDate === todayDate"
           v-for="customer in dataCustomer"
           :key="customer.id"
-          class="p-4 rounded-2xl bg-white mb-2 grid grid-cols-2">
+          class="p-4 rounded-2xl bg-white mb-3 grid grid-cols-2">
           <!-- 왼쪽 목록 -->
           <div class="flex flex-col">
             <!-- 시간 -->
@@ -206,7 +207,7 @@
           </div>
         </div>
         <!-- 오늘 날짜가 아니라면 안내 문구 표시 -->
-        <p v-else class="text-center text-gray-500 py-4">선택된 날짜에는 예약이 없습니다.</p>
+        <p v-else class="text-center text-gray-500 py-4">예약 목록이 없습니다.</p>
       </div>
     </div>
   </div>
