@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar mt-[50px] w-full h-full py-[50px] px-[20px] shadow-[1px_4px_30px_rgba(0,0,0,0.11)] rounded-[30px]">
+  <div class="calendar w-full h-full py-[50px] px-[20px] rounded-[30px]">
     <!-- 10월, 좌우 버튼 -->
     <div class="header flex justify-between px-[26px] items-center">
       <span class="text-[#092857] text-[24px] font-bold"
