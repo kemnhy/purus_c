@@ -132,6 +132,7 @@
             <td class="py-3 px-3 border-r border-[#8888]">
               <button
                 class="cursor-pointer py-1.5 px-4 rounded-md bg-[#296af1] text-white text-sm"
+                @click="detailModal = true"
               >
                 보기
               </button>
@@ -181,20 +182,26 @@
   </div>
   <!-- 기사 상세 모달 -->
   <!-- 오버레이 -->
-  <div class="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.9)]">
+  <div
+    class="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.85)]"
+    v-if="detailModal"
+  >
     <!-- 닫기 버튼 -->
-    <button class="cursor-pointer absolute top-4 right-6 text-white text-2xl">
+    <button
+      class="cursor-pointer absolute top-4 right-6 text-white text-2xl"
+      @click="detailModal = false"
+    >
       × 닫기
     </button>
     <!-- 내용 -->
-    <div class="w-[72%] m-auto pt-14">
+    <div class="w-[65%] m-auto pt-14">
       <!-- 타이틀 박스 -->
       <div class="flex justify-between pb-8 items-center">
-        <h1 class="text-white text-5xl font-bold">기사 상세 정보</h1>
+        <h1 class="text-white text-4xl font-bold">기사 상세 정보</h1>
         <!-- 기사프로필 -->
-        <div class="flex items-center gap-6">
-          <img src="/images/workerProfile.png" alt="기사프로필" class="w-28" />
-          <span class="text-white text-4xl font-bold">이깨끗</span>
+        <div class="flex items-center gap-4">
+          <img src="/images/workerProfile.png" alt="기사프로필" class="w-24" />
+          <span class="text-white text-3xl font-bold">이깨끗</span>
         </div>
       </div>
       <!-- 플렉스 박스 -->
@@ -202,24 +209,59 @@
         <!-- 소득누계 / 예약진행률 -->
         <div class="flex flex-col gap-8 flex-1">
           <!-- 소득누계 카드 -->
-          <div class="rounded-[40px] p-10 bg-linear-to-t from-[#BDE9FF] to-white to-70%">
+          <div
+            class="rounded-[40px] p-10 bg-linear-to-t from-[#BDE9FF] to-white to-70%"
+          >
             <!-- 배정 / 정산일 -->
-             <div class="mb-40">
-                <p class="text-lg font-semibold">배정 : <span class="font-bold text-[#092857]">38</span> 건</p>
-                <p class="text-lg font-semibold">정산일 : <span class="font-bold text-[#092857]">15</span> 일</p>
-             </div>
-             <!-- 기사 소득 누계 -->
-              <div class="flex flex-col gap-4 items-center">
-                <p class="text-2xl font-bold text-[#092857]">기사 소득 누계</p>
-                <h2 class="text-4xl font-bold text-[#296AF1]">2,150,000 원</h2>
-                <p class="text-2xl font-bold text-[#092857]">완료 <span class="text-[#296AF1]">33</span> 건</p>
-              </div>
+            <div class="mb-26">
+              <p class="text-lg font-semibold">
+                배정 : <span class="font-bold text-[#092857]">38</span> 건
+              </p>
+              <p class="text-lg font-semibold">
+                정산일 : <span class="font-bold text-[#092857]">15</span> 일
+              </p>
+            </div>
+            <!-- 기사 소득 누계 -->
+            <div class="flex flex-col gap-4 items-center">
+              <p class="text-2xl font-bold text-[#092857]">기사 소득 누계</p>
+              <h2 class="text-4xl font-bold text-[#296AF1]">2,150,000 원</h2>
+              <p class="text-2xl font-bold text-[#092857]">
+                완료 <span class="text-[#296AF1]">33</span> 건
+              </p>
+            </div>
           </div>
           <!-- 예약진행률 카드 -->
-          <div class="bg-white rounded-[40px] p-10">11</div>
+          <div class="bg-white rounded-[40px] p-10">
+            <div class="flex items-center justify-between text-center">
+              <!-- 왼쪽 // 진행률 그래프 -->
+              <div>
+                <h3 class="text-xl font-bold text-[#092857] mb-3">예약 진행률</h3>
+                <!-- 그래프 -->
+                 <div class="relative border-8 w-30 h-30 rounded-full border-[#ccc]">
+                   <!-- 진행률 액티브 바 -->
+                   <div class="absolute -top-2 -left-2 border-8 w-30 h-30 rounded-full border-[#296AF1]"></div>
+                   <!-- 진행률 숫자 -->
+                    <p class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] text-2xl font-bold text-[#092857]">100</p>
+                 </div>
+              </div>
+              <!-- 오른쪽 // 구분 -->
+              <div class=" flex flex-col gap-2 mt-6">
+                <!-- 전체예약 -->
+                <div class="flex items-center gap-2">
+                  <div class="bar w-10 h-2 rounded-full bg-[#ccc]"></div>
+                  <span>전체예약</span>
+                </div>
+                <!-- 완료건수 -->
+                <div class="flex items-center gap-2">
+                  <div class="bar w-10 h-2 rounded-full bg-[#296AF1]"></div>
+                  <span>완료건수</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- 예약목록 -->
-        <div class="bg-white rounded-[50px] flex-[1.2]">
+        <div class="bg-white rounded-[50px] flex-[1.3]">
           <!-- 전체 예약 목록 -->
           <div class="p-10">
             <!-- 타이틀 -->
@@ -304,7 +346,7 @@
           </div>
         </div>
         <!-- 캘린더 -->
-        <div class="flex-[1.2] bg-white rounded-[50px] flex justify-center">
+        <div class="flex-[1.3] bg-white rounded-[50px] flex justify-center">
           <!-- 크기조절용 div -->
           <div class="w-[90%] m-auto">
             <Calendar />
@@ -332,6 +374,9 @@ const dataCustomer = ref(customerData);
 function goNewWorker() {
   router.push({ name: "NewWorker" });
 }
+
+// 모달상태
+const detailModal = ref(false);
 
 // 정렬상태
 const sortType = ref("recent");
