@@ -10,7 +10,7 @@
             id="email"
             placeholder="이메일 입력하세요."
             required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#296af1]" />
         </div>
         <div class="relative space-y-2">
           <label for="password" class="block text-sm font-medium text-gray-700">비밀번호</label>
@@ -21,7 +21,7 @@
               placeholder="비밀번호 입력하세요."
               required
               :type="showPassword ? 'text' : 'password'"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#296af1]" />
             <button
               type="button"
               @click="togglePassword"

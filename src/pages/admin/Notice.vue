@@ -10,7 +10,7 @@
             rows="5"
             v-model="noticeDesc"
             id="desc"
-            class="bg-white mt-1 w-[90%] border rounded-md border-gray-400 py-0.5"></textarea>
+            class="bg-white mt-1 w-full border rounded-md border-gray-400 py-0.5"></textarea>
         </div>
         <!-- 등록 버튼 -->
         <button class="py-1.5 px-10 mr-5 rounded-md bg-[#296af1] text-white">등록</button>

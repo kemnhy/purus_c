@@ -3,6 +3,15 @@
   <div class="p-4">
     <!-- 통계 카드 -->
     <DashboardStats :stats="stats" />
+
+    <div class="mt-10 bg-white rounded-2xl border border-gray-200 p-6">
+      <!-- 헤더 -->
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">월별 예약</h2>
+        <!-- 년도 선택 -->
+         
+      </div>
+    </div>
   </div>
 </template>
 
