@@ -64,22 +64,22 @@
           class="border-b border-[#8888]"
         >
           <td class="py-3 px-3 opacity-80 border-r border-[#8888]">
-            {{ item.date }}
+            {{ item.reservationDate }}
           </td>
           <td class="py-3 px-3 opacity-80 border-r border-[#8888]">
-            {{ item.name }}({{ item.cafename }})
+            {{ item.customerName }}({{ item.cafeName }})
           </td>
           <td class="py-3 px-3 opacity-80 border-r border-[#8888]">
             {{ item.phone }}
           </td>
           <td class="py-3 px-3 opacity-80 border-r border-[#8888]">
-            {{ item.model }}
+            {{ item.iceMachineModel }}
           </td>
           <td class="py-3 px-3 opacity-80 border-r border-[#8888]">
-            {{ item.price }}
+            {{ item.paymentAmount }}
           </td>
           <td class="py-3 px-3 opacity-80 border-r border-[#8888]">
-            {{ item.reserDate }}
+            {{ item.requestDate }}
           </td>
           <td class="py-3 px-3 opacity-80 border-r border-[#8888] font-bold">
             <span
@@ -103,7 +103,7 @@
 <script setup>
 import DashboardStats from "@/components/admin/DashboardStats.vue";
 import { ref, computed } from "vue";
-import customerData from "@/data/customer.json";
+import customerData from "@/data/reservations.json";
 
 const today = new Date().toLocaleDateString("ko-KR", {
   weekday: "long",
@@ -150,7 +150,7 @@ const stats = [
 const data = customerData;
 
 // 페이지 관련 상태
-const pageSize = 3; // 한 페이지에 8개
+const pageSize = 8; // 한 페이지에 8개
 const currentPage = ref(1);
 
 // 현재 페이지에 보여줄 데이터

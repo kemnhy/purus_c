@@ -124,6 +124,9 @@ onBeforeUnmount(() => {
       text-align: center;
       padding: 3px 0;
     }
+    th:nth-child(1) {
+      padding-top: 15px;
+    }
     /* 열 비율 설정 */
     th:nth-child(1),
     td:nth-child(1) {

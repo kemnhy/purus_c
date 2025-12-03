@@ -34,13 +34,13 @@
         <!-- 테이블 바디 -->
         <tbody>
           <tr v-for="item in paginatedData" :key="item.id" class="border-b border-[#8888]">
-            <td class="py-3 opacity-80 border-r border-[#8888]">{{ item.id }}</td>
-            <td class="py-3 pl-3 opacity-80 border-r border-[#8888] text-left">
+            <td class="py-4 opacity-80 border-r border-[#8888]">{{ item.id }}</td>
+            <td class="py-4 pl-3 opacity-80 border-r border-[#8888] text-left">
               {{ item.content }}
             </td>
-            <td class="py-3 opacity-80 border-r border-[#8888]">{{ item.date }}</td>
+            <td class="py-4 opacity-80 border-r border-[#8888]">{{ item.date }}</td>
             <!-- 관리 -->
-            <td class="py-3 flex justify-center gap-3">
+            <td class="py-4 flex justify-center gap-3">
               <button @click="delNotice(item)" class="opacity-60 cursor-pointer">
                 <i class="fa-solid fa-trash"></i>
               </button>

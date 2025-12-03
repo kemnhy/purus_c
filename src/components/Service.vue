@@ -11,16 +11,26 @@
           <div class="txt">
             <h2>간단한 절차</h2>
             <p>
-              <strong>원하는 시간, 일정</strong>만 입력하면<br
-                v-if="!isMobile"
-              />Purus가 알아서 청소해 드립니다.
+              <strong>원하는 시간, 일정</strong>
+              만 입력하면
+              <br v-if="!isMobile" />
+              Purus가 알아서 청소해 드립니다.
             </p>
           </div>
           <div class="contents">
             <ul class="box">
-              <li>청소주기 : <strong>매달</strong></li>
-              <li>서비스 시간 : <strong>2시간</strong></li>
-              <li>청소 날짜 : <strong>8월 7일</strong></li>
+              <li>
+                청소주기 :
+                <strong>매달</strong>
+              </li>
+              <li>
+                서비스 시간 :
+                <strong>2시간</strong>
+              </li>
+              <li>
+                청소 날짜 :
+                <strong>8월 7일</strong>
+              </li>
             </ul>
           </div>
         </li>
@@ -29,9 +39,11 @@
           <div class="txt">
             <h2>확실한 보고</h2>
             <p>
-              작업 후 <strong>청소 전·후 사진</strong>을<br
-                v-if="!isMobile"
-              />고객님께 전송해 드립니다.
+              작업 후
+              <strong>청소 전·후 사진</strong>
+              을
+              <br v-if="!isMobile" />
+              고객님께 전송해 드립니다.
             </p>
           </div>
           <div class="contents">
@@ -53,7 +65,9 @@
           <div class="txt">
             <h2>1:1 맞춤 서비스</h2>
             <p>
-              <strong>1:1담당자 맞춤 서비스</strong>로<br v-if="!isMobile" />
+              <strong>1:1담당자 맞춤 서비스</strong>
+              로
+              <br v-if="!isMobile" />
               끝까지 확실하게 책임집니다.
             </p>
           </div>
@@ -62,7 +76,10 @@
               <li><i class="fa-solid fa-user"></i></li>
               <li>
                 <p>OOO기사</p>
-                <p class="star"><i class="fa-solid fa-star"></i> 5.0</p>
+                <p class="star">
+                  <i class="fa-solid fa-star"></i>
+                  5.0
+                </p>
               </li>
             </ul>
           </div>
@@ -72,8 +89,9 @@
           <div class="txt">
             <h2>{{ serviceTitle }}</h2>
             <p>
-              <strong>오전 8시 ~ 오후 10시까지, </strong
-              ><br v-if="!isMobile" />휴일에도 신속하게 해결해드립니다.
+              <strong>오전 8시 ~ 오후 10시까지,</strong>
+              <br v-if="!isMobile" />
+              휴일에도 신속하게 해결해드립니다.
             </p>
           </div>
           <div class="contents">
@@ -127,6 +145,7 @@ onUnmounted(() => {
   .title {
     text-align: center;
     font-size: $main-title;
+    font-weight: bold;
   }
   .inner {
     overflow: hidden;
@@ -143,11 +162,12 @@ onUnmounted(() => {
         height: 350px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        gap: 40px;
         &:first-child,
         &:nth-child(3) {
           padding-bottom: 0;
         }
+
         // 설명 텍스트
         .txt {
           width: 100%;
@@ -256,7 +276,7 @@ onUnmounted(() => {
   }
 }
 // 태블릿 스타일
-@media screen and (max-width: 768px) and (min-width:451px) {
+@media screen and (max-width: 768px) and (min-width: 451px) {
   .service-wrap {
     padding: $tab-spacing 0;
     .title {

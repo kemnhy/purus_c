@@ -45,65 +45,101 @@
                 required />
             </div>
           </div>
+          
+          <!-- 날짜 선택 영역 -->
           <div class="service_date">
-            <p>
-              희망 서비스 날짜를 선택해주세요.
-              <span>(필수)</span>
-            </p>
-          </div>
-          <!-- 달력 -->
-          <div class="calendar-header">
-            <i class="fa-solid fa-square-caret-left" @click="prevMonth"></i>
-            <span>{{ currentYear }}년 {{ currentMonth + 1 }}월</span>
-            <i class="fa-solid fa-square-caret-right" @click="nextMonth"></i>
-          </div>
-          <div class="calendar">
-            <!-- 달력 헤더 -->
-            <div class="calendar_wrap">
-              <!-- 요일 -->
-              <div class="calendar-weekdays">
-                <span
-                  v-for="day in weekDays"
-                  :key="day"
-                  :class="{ sun: day === '일', sat: day === '토' }">
-                  {{ day }}
-                </span>
+            <div class="select_header">
+              <p>
+                희망 서비스 날짜를 선택해주세요.
+                <span>(필수)</span>
+              </p>
+              <button 
+                v-if="selectedDate !== null && !isCalendarOpen" 
+                @click="isCalendarOpen = true"
+                class="edit_btn">
+                변경
+              </button>
+            </div>
+            
+            <!-- 선택된 날짜 표시 -->
+            <div v-if="selectedDate !== null && !isCalendarOpen" class="selected_date_box">
+              <i class="fa-solid fa-calendar-check"></i>
+              <span>{{ formatSelectedDateShort }}</span>
+            </div>
+            
+            <!-- 달력 표시 -->
+            <div v-else>
+              <!-- 달력 -->
+              <div class="calendar-header">
+                <i class="fa-solid fa-square-caret-left" @click="prevMonth"></i>
+                <span>{{ currentYear }}년 {{ currentMonth + 1 }}월</span>
+                <i class="fa-solid fa-square-caret-right" @click="nextMonth"></i>
               </div>
-
-              <!-- 날짜 -->
-              <div class="calendar-days">
-                <span v-for="blank in blanks" :key="'b' + blank"></span>
-
-                <div
-                  v-for="date in daysInMonth"
-                  :key="date"
-                  class="calendar-day"
-                  :class="{
-                    today: isToday(date),
-                    sun: isSunday(date),
-                    sat: isSaturday(date),
-                    selected: selectedDate === date,
-                    closed: isPastDate(date),
-                  }"
-                  @click="selectDate(date)">
-                  <p class="date">{{ date }}</p>
-                  <div class="day-status">
-                    <span class="status">
-                      {{ isPastDate(date) ? "마감" : "" }}
+              <div class="calendar">
+                <!-- 달력 헤더 -->
+                <div class="calendar_wrap">
+                  <!-- 요일 -->
+                  <div class="calendar-weekdays">
+                    <span
+                      v-for="day in weekDays"
+                      :key="day"
+                      :class="{ sun: day === '일', sat: day === '토' }">
+                      {{ day }}
                     </span>
+                  </div>
+
+                  <!-- 날짜 -->
+                  <div class="calendar-days">
+                    <span v-for="blank in blanks" :key="'b' + blank"></span>
+
+                    <div
+                      v-for="date in daysInMonth"
+                      :key="date"
+                      class="calendar-day"
+                      :class="{
+                        today: isToday(date),
+                        sun: isSunday(date),
+                        sat: isSaturday(date),
+                        selected: selectedDate === date,
+                        closed: isPastDate(date),
+                      }"
+                      @click="selectDate(date)">
+                      <p class="date">{{ date }}</p>
+                      <div class="day-status">
+                        <span class="status">
+                          {{ isPastDate(date) ? "마감" : "" }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- 오전/오후 버튼 -->
-          <div class="calendar-period">
-            <button @click="selectPeriod('오전')" :class="{ active: selectedPeriod === '오전' }">
-              오전
-            </button>
-            <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">
-              오후
-            </button>
+          
+          <!-- 오전/오후 버튼 (날짜 선택 후에만 표시) -->
+          <div v-if="selectedDate !== null" class="period_section">
+            <div class="select_header">
+              <p>
+                서비스 시간을 선택해주세요.
+                <span>(필수)</span>
+              </p>
+            </div>
+            <div class="calendar-period">
+              <button 
+                @click="selectPeriod('오전')" 
+                :class="{ 
+                  active: selectedPeriod === '오전',
+                  disabled: isSelectedDateToday && isAfternoon
+                }"
+                :disabled="isSelectedDateToday && isAfternoon">
+                오전
+                <span v-if="isSelectedDateToday && isAfternoon" class="disabled-text">(마감)</span>
+              </button>
+              <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">
+                오후
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -221,6 +257,7 @@ import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
+
 //카카오 주소 검색기능
 const address = ref("");
 const detailAddress = ref("");
@@ -265,8 +302,7 @@ const currentYear = ref(today.getFullYear());
 const currentMonth = ref(today.getMonth());
 const selectedDate = ref(null);
 const selectedPeriod = ref(null);
-
-// 날짜를 선택하면 오전오후 활성화
+const isCalendarOpen = ref(true); // 달력 열림/닫힘 상태
 
 const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -318,13 +354,34 @@ const selectDate = (date) => {
   if (isPastDate(date)) return; // 마감된 날짜 클릭 방지
   selectedDate.value = date;
   selectedPeriod.value = null;
+  isCalendarOpen.value = false; // 날짜 선택하면 달력 닫기
 };
 
 // 오전/오후 선택
 const selectPeriod = (period) => {
+  // 오늘 날짜이고 현재 시간이 오후인 경우 오전 선택 불가
+  if (isSelectedDateToday.value && period === '오전' && isAfternoon.value) {
+    alert('오늘 날짜는 오전 시간이 지나 오후만 선택 가능합니다.');
+    return;
+  }
   selectedPeriod.value = period;
-  selectDay.value = true;
 };
+
+// 현재 시간이 오후(12시 이후)인지 체크
+const isAfternoon = computed(() => {
+  const currentHour = new Date().getHours();
+  return currentHour >= 12;
+});
+
+// 선택한 날짜가 오늘인지 체크
+const isSelectedDateToday = computed(() => {
+  if (!selectedDate.value) return false;
+  return (
+    selectedDate.value === today.getDate() &&
+    currentMonth.value === today.getMonth() &&
+    currentYear.value === today.getFullYear()
+  );
+});
 
 // 요일 계산
 const isSunday = (date) => new Date(currentYear.value, currentMonth.value, date).getDay() === 0;
@@ -347,6 +404,17 @@ const isToday = (date) => {
   );
 };
 
+// ✅ 선택된 날짜를 간단하게 표시 (박스용)
+const formatSelectedDateShort = computed(() => {
+  if (!selectedDate.value) return "";
+  const d = new Date(currentYear.value, currentMonth.value, selectedDate.value);
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekday = ["일", "월", "화", "수", "목", "금", "토"][d.getDay()];
+  return `${year}년 ${month}월 ${day}일 (${weekday}요일)`;
+});
+
 // ✅ 완성된 문장 계산 (년월일 + 요일 + 오전/오후)
 const formattedSelectedDate = computed(() => {
   if (!selectedDate.value) return "";
@@ -362,15 +430,11 @@ const formattedSelectedDate = computed(() => {
 // 게이지 계산 (단계별로 3단계)
 const gaugeWidth = computed(() => {
   if (selectedPeriod.value !== null) return "95%"; // 3단계
-  if (detailAddress.value !== "") return "66%"; // 2단계
-  return "33%"; // 1단계 (브랜드 선택 시작)
+  if (selectedDate.value !== null) return "66%"; // 2단계
+  return "33%"; // 1단계
 });
 
-// 다음버튼 나오기
-const selectDay = ref(false);
-
 // 예약정보 확인 모달
-
 const showCheckModal = ref(false);
 const showLoadingModal = ref(false);
 const showCheckAnimation = ref(false);
@@ -389,6 +453,7 @@ const openCheckModal = () => {
   }
   showCheckModal.value = true;
 };
+
 const reserCompleteModal = async () => {
   // 1단계: 확인 모달 숨기고 로딩 모달 표시
   showCheckModal.value = false;
@@ -442,12 +507,11 @@ const goToHome = () => {
   margin: auto;
   margin-bottom: 50px;
 }
+
 // 견적 확인
-// 영역 이름
 .esti_title {
   display: flex;
   height: 60px;
-  // background-color: aliceblue;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid $grey-color;
@@ -459,6 +523,7 @@ const goToHome = () => {
     color: $font-color;
   }
 }
+
 // 게이지
 .esti_gauge {
   position: relative;
@@ -479,13 +544,14 @@ const goToHome = () => {
     transition: width 0.4s ease;
   }
 }
+
 .data_w {
   max-height: calc(100vh - 280px);
   overflow-y: auto;
   padding-bottom: 20px;
 }
-.addr,
-.service_date {
+
+.addr {
   p {
     font-size: $esti-medium-txt;
     span {
@@ -501,8 +567,69 @@ const goToHome = () => {
     width: 100%;
   }
 }
+
+// 선택 헤더 (제목 + 변경 버튼)
+.select_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  
+  p {
+    font-size: $esti-medium-txt;
+    span {
+      font-size: 16px;
+      color: $point-color;
+    }
+  }
+}
+
+.edit_btn {
+  padding: 8px 20px;
+  background-color: #fff;
+  border: 1px solid $point-color;
+  color: $point-color;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: $point-color;
+    color: #fff;
+  }
+}
+
+// 선택된 날짜 표시 박스
+.selected_date_box {
+  padding: 20px;
+  background-color: rgba($sub-color, 0.5);
+  border: 2px solid $point-color;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  
+  i {
+    font-size: 24px;
+    color: $point-color;
+  }
+  
+  span {
+    font-size: 18px;
+    font-weight: 600;
+    color: $point-color;
+  }
+}
+
 .service_date {
   margin-top: 60px;
+}
+
+.period_section {
+  margin-top: 40px;
 }
 
 // 달력
@@ -515,6 +642,12 @@ const goToHome = () => {
   font-size: $small-txt;
   i {
     color: $point-color;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 }
 
@@ -539,75 +672,108 @@ const goToHome = () => {
     text-align: center;
     justify-items: center;
     min-height: 240px;
+    
     .calendar-day {
       padding: 10px 15px 30px;
       border-radius: 8px;
       cursor: pointer;
       transition: 0.2s;
+      
       p {
         font-size: $small-txt;
       }
-      &:hover {
+      
+      &:hover:not(.closed) {
         background-color: $grey-color;
       }
+      
       &.today {
         border: 1px solid $point-color;
         background-color: $main-color;
       }
+      
       &.selected {
         background-color: $point-color;
         color: white;
       }
+      
       &.closed {
         color: $border-color;
         cursor: not-allowed;
+        
         span {
           color: tomato;
         }
       }
+      
       .date {
         font-weight: 500;
       }
 
       .status {
         font-size: 12px;
-        // translate: 30%;
       }
+      
       .day-status {
         min-height: 20px;
       }
     }
   }
+  
   .sun {
     color: tomato;
   }
+  
   .sat {
     color: $point-color;
   }
 }
+
 .calendar-period {
   display: flex;
   justify-content: space-around;
-  margin-top: 16px;
   gap: 20px;
 
   button {
     flex: 1;
-    padding: 10px 24px;
+    padding: 15px 24px;
     font-size: $small-txt;
-    border: transparent;
+    border: 2px solid $border-color;
     border-radius: 10px;
-    background-color: $grey-color;
+    background-color: #fff;
     cursor: pointer;
     color: $sub-font-color;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &:hover:not(.disabled) {
+      border-color: $point-color;
+      background-color: rgba($sub-color, 0.2);
+    }
 
     &.active {
       background: $point-color;
       color: white;
       font-weight: 600;
+      border-color: $point-color;
+    }
+    
+    &.disabled {
+      background-color: #f5f5f5;
+      color: #c2c2c2;
+      border-color: #e0e0e0;
+      cursor: not-allowed;
+      
+      .disabled-text {
+        display: inline;
+        font-size: 12px;
+        margin-left: 5px;
+        color: tomato;
+      }
     }
   }
 }
+
 // 다음 버튼
 .fixed_btn {
   background-color: #fff;
@@ -624,6 +790,7 @@ const goToHome = () => {
       text-align: center;
       background-color: $grey-color;
       color: $border-color;
+      cursor: pointer;
       &.active {
         background-color: $point-color;
         color: #fff;
@@ -631,6 +798,7 @@ const goToHome = () => {
     }
   }
 }
+
 .modal_bg {
   position: fixed;
   top: 0;
@@ -640,12 +808,12 @@ const goToHome = () => {
   z-index: 999999;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .check_modal,
 .loading_modal,
 .check_animation_modal {
   background-color: #fff;
   width: 560px;
-  // height: 480px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -653,6 +821,7 @@ const goToHome = () => {
   z-index: 9999999;
   border-radius: 30px;
   padding: 40px 50px 50px;
+  
   .x-mark {
     position: absolute;
     right: 30px;
@@ -660,53 +829,65 @@ const goToHome = () => {
     font-size: $medium-txt-2;
     cursor: pointer;
   }
+  
   .modal_title {
     font-size: $esti-large-txt;
     font-weight: 600;
     text-align: center;
     margin-bottom: 30px;
   }
+  
   .modal_w {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 10px;
+    
     img {
       width: 60%;
     }
+    
     .reser_process {
       margin-top: 5px;
       display: flex;
       gap: 72px;
+      
       p {
         font-size: 16px;
         font-weight: 600;
         color: $point-color;
+        
         &:last-child {
           font-weight: 400;
           color: #c2c2c2;
         }
       }
     }
+    
     hr {
       width: 100%;
       border: 1px solid #c2c2c2;
       margin: 30px 0;
     }
+    
     .reser_notice {
       text-align: center;
       margin-bottom: 55px;
+      
       p {
         font-size: $small-txt;
+        
         strong {
           color: $point-color;
         }
       }
     }
   }
+  
   .reser_check_notice {
     position: relative;
     padding-left: 25px;
+    
     &::before {
       content: "";
       display: block;
@@ -718,30 +899,36 @@ const goToHome = () => {
       top: 5px;
       left: 0;
     }
+    
     p {
       color: $border-color;
       font-size: 16px;
     }
   }
+  
   .info_w {
     display: flex;
     flex-direction: column;
     gap: 20px;
     font-size: $small-txt;
     margin-bottom: 40px;
+    
     div {
       display: flex;
       justify-content: space-between;
     }
   }
+  
   .reserbtns {
     display: flex;
     gap: 20px;
+    
     .btn {
       font-size: $esti-medium-txt;
       width: 70%;
       font-weight: 600;
       padding: 10px;
+      
       &.btn_danger {
         width: 30%;
         text-align: center;
@@ -750,6 +937,7 @@ const goToHome = () => {
     }
   }
 }
+
 /* 로딩 애니메이션 스타일 */
 .loading_modal {
   text-align: center;
@@ -851,10 +1039,8 @@ const goToHome = () => {
   .calendar .calendar-days .calendar-day {
     padding: 10px 15px 15px;
   }
-  .infoCheck {
-    margin-top: 50px;
-  }
 }
+
 @media screen and (max-width: 450px) {
   .esti_inner {
     max-width: 280px;
@@ -862,6 +1048,7 @@ const goToHome = () => {
       max-height: calc(100dvh - (45px + 50px + 100px + 57px));
     }
   }
+  
   // 영역 이름
   .esti_title {
     height: 50px;
@@ -871,11 +1058,12 @@ const goToHome = () => {
       font-size: $esti-medium-txt;
     }
   }
+  
   .esti_gauge {
     height: 7px;
   }
-  .addr,
-  .service_date {
+  
+  .addr {
     p {
       font-size: 16px;
       span {
@@ -886,19 +1074,60 @@ const goToHome = () => {
       font-size: 12px;
     }
   }
+  
+  .select_header {
+    margin-bottom: 10px;
+    
+    p {
+      font-size: 16px;
+      span {
+        font-size: 12px;
+      }
+    }
+  }
+  
+  .edit_btn {
+    padding: 6px 15px;
+    font-size: 12px;
+  }
+  
+  .selected_date_box {
+    padding: 15px;
+    margin-bottom: 20px;
+    
+    i {
+      font-size: 20px;
+    }
+    
+    span {
+      font-size: 14px;
+    }
+  }
+  
+  .service_date {
+    margin-top: 30px;
+  }
+  
+  .period_section {
+    margin-top: 25px;
+  }
+  
   // 달력
   .calendar-header {
     font-size: 16px;
   }
+  
   .calendar {
     padding: 10px 0;
   }
+  
   .calendar-weekdays {
     margin-bottom: 15px !important;
     span {
       font-size: 16px;
     }
   }
+  
   .calendar-days {
     .calendar-day {
       padding: 0 5px !important;
@@ -907,35 +1136,33 @@ const goToHome = () => {
       }
     }
   }
+  
   .calendar-period {
     gap: 10px;
     button {
       font-size: 16px;
-      padding: 5px 0;
+      padding: 10px 0;
     }
   }
 
   // 모달창
-  .infoCheck {
-    margin-top: 30px;
-    .btn {
-      font-size: $small-txt;
-    }
-  }
   .check_modal,
   .loading_modal,
   .check_animation_modal {
     width: 280px;
     padding: 30px 20px;
     border-radius: 20px;
+    
     .modal_title {
       font-size: $esti-medium-txt;
       margin-bottom: 15px;
     }
+    
     .info_w {
       gap: 10px;
       font-size: 14px;
       margin-bottom: 15px;
+      
       div {
         p:nth-child(2) {
           width: 70%;
@@ -943,21 +1170,26 @@ const goToHome = () => {
         }
       }
     }
+    
     .x-mark {
       top: 20px;
       right: 20px;
       font-size: 18px;
     }
+    
     .modal_w {
       img {
         width: 80%;
       }
+      
       .reser_process {
         gap: 32px;
       }
+      
       hr {
         margin: 20px 0;
       }
+      
       .reser_notice {
         margin-bottom: 20px;
         p {
@@ -965,27 +1197,34 @@ const goToHome = () => {
         }
       }
     }
+    
     .reser_check_notice {
       padding-left: 10px;
+      
       &::before {
         width: 2px;
         height: 28px;
         top: 3px;
       }
+      
       p {
         font-size: 12px;
       }
     }
+    
     .reserbtns {
       gap: 10px;
+      
       .btn {
         font-size: 16px;
         width: 60%;
+        
         &.btn_danger {
           width: 40%;
         }
       }
     }
+    
     .loading_text {
       font-size: 14px;
     }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top_wrap">
-      <Event_modal />
+      <!-- <Event_modal /> -->
       <Header_w />
       <Side_menu />
       <Visual />
@@ -10,9 +10,10 @@
     <Care_reason />
     <Main_banner />
     <Service />
+    <Point_banner />
     <Process />
     <Self_care />
-    <Point_banner />
+    <Event_banner/>
     <Real_review />
     <Best_pro />
     <FAQ />
@@ -36,8 +37,8 @@ import Service from "@/components/Service.vue";
 import Side_menu from "@/components/Side_menu.vue";
 import Visual from "@/components/Visual.vue";
 import Footer_w from "@/components/Footer_w.vue";
-import Event_modal from "@/components/Event_modal.vue";
 import Quick_btn from '@/components/Quick_btn.vue';
+import Event_banner from "@/components/Event_banner.vue";
 </script>
 <style lang="scss" scoped>
 .top_wrap {

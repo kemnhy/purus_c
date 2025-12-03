@@ -35,7 +35,7 @@
         <ul class="flex flex-col gap-2">
           <li class="flex justify-between">
             <p class="text-[#555555]">이름</p>
-            <p class="text-black font-semibold">{{ reservationDetail.name }}</p>
+            <p class="text-black font-semibold">{{ reservationDetail.customerName }}</p>
           </li>
           <li class="flex justify-between">
             <p class="text-[#555555]">전화번호</p>
@@ -43,11 +43,11 @@
           </li>
           <li class="flex justify-between">
             <p class="text-[#555555]">매장명</p>
-            <p class="text-black font-semibold">{{ reservationDetail.cafename }}</p>
+            <p class="text-black font-semibold">{{ reservationDetail.cafeName }}</p>
           </li>
           <li class="flex justify-between">
             <p class="text-[#555555]">주소</p>
-            <p class="text-black font-semibold">{{ reservationDetail.addr }}</p>
+            <p class="text-black font-semibold">{{ reservationDetail.address }}</p>
           </li>
           <li class="flex justify-between">
             <p class="text-[#555555]">요청사항</p>
@@ -59,7 +59,7 @@
         <ul class="flex flex-col gap-2">
           <li class="flex justify-between">
             <p class="text-[#555555]">제빙기 모델명</p>
-            <p class="text-black font-semibold">{{ reservationDetail.model }}</p>
+            <p class="text-black font-semibold">{{ reservationDetail.iceMachineModel }}</p>
           </li>
           <li class="flex justify-between">
             <p class="text-[#555555]">이용서비스</p>
@@ -118,7 +118,7 @@ onMounted(() => {
     const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
     // 주소로 좌표 검색 후 마커 표시
-    geocoder.addressSearch(reservationDetail.value.addr, (result, status) => {
+    geocoder.addressSearch(reservationDetail.value.address, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 

@@ -10,7 +10,7 @@
       <h5 class="text-lg font-bold text-[#092857] pb-4">고객정보</h5>
       <div class="flex w-full justify-between">
         <span class="opacity-60">이름</span
-        ><span class="font-bold">{{ reservationDetail.name }}</span>
+        ><span class="font-bold">{{ reservationDetail.customerName }}</span>
       </div>
       <div class="flex w-full justify-between">
         <span class="opacity-60">전화번호</span
@@ -18,7 +18,7 @@
       </div>
       <div class="flex w-full justify-between">
         <span class="opacity-60">매장명</span
-        ><span class="font-bold">{{ reservationDetail.cafename }}</span>
+        ><span class="font-bold">{{ reservationDetail.cafeName }}</span>
       </div>
     </div>
     <!-- 섹션2 / 서비스 내역 -->
@@ -26,7 +26,7 @@
       <h5 class="text-lg font-bold text-[#092857] pb-4">서비스 내역</h5>
       <div class="flex w-full justify-between">
         <span class="opacity-60">제빙기 모델명</span
-        ><span class="font-bold">{{ reservationDetail.model }}</span>
+        ><span class="font-bold">{{ reservationDetail.iceMachineModel }}</span>
       </div>
       <div class="flex w-full justify-between">
         <span class="opacity-60">이용서비스</span
@@ -34,7 +34,7 @@
       </div>
       <div class="flex w-full justify-between">
         <span class="opacity-60">담당 기사님</span
-        ><span class="font-bold">{{ reservationDetail.worker }}</span>
+        ><span class="font-bold">{{ reservationDetail.engineer }}</span>
       </div>
     </div>
     <!-- 폼 -->

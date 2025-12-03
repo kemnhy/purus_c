@@ -27,7 +27,7 @@
         </div>
         <div class="flex w-full justify-between">
           <span class="opacity-60">이름</span
-          ><span class="font-bold">{{ reservationDetail.name }}</span>
+          ><span class="font-bold">{{ reservationDetail.customerName }}</span>
         </div>
         <div class="flex w-full justify-between">
           <span class="opacity-60">전화번호</span
@@ -35,11 +35,11 @@
         </div>
         <div class="flex w-full justify-between">
           <span class="opacity-60">매장명</span
-          ><span class="font-bold">{{ reservationDetail.cafename }}</span>
+          ><span class="font-bold">{{ reservationDetail.cafeName }}</span>
         </div>
         <div class="flex w-full justify-between">
           <span class="opacity-60">주소</span
-          ><span class="font-bold">{{ reservationDetail.addr }}</span>
+          ><span class="font-bold">{{ reservationDetail.address }}</span>
         </div>
         <div class="flex w-full justify-between">
           <span class="opacity-60">요청사항</span
@@ -51,7 +51,7 @@
         <h5 class="text-lg font-bold text-[#092857] pb-4">서비스 내역</h5>
         <div class="flex w-full justify-between">
           <span class="opacity-60">제빙기 모델명</span
-          ><span class="font-bold">{{ reservationDetail.model }}</span>
+          ><span class="font-bold">{{ reservationDetail.iceMachineModel }}</span>
         </div>
         <div class="flex w-full justify-between">
           <span class="opacity-60">이용서비스</span
@@ -156,7 +156,7 @@ onMounted(() => {
     );
 
     // 주소로 좌표 검색 후 마커 표시
-    geocoder.addressSearch(reservationDetail.value.addr, (result, status) => {
+    geocoder.addressSearch(reservationDetail.value.address, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 

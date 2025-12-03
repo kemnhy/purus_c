@@ -1,6 +1,6 @@
 <template>
   <!-- 기사 홈 -->
-  <div class="bg-[#f0faff]">
+  <div class="">
     <!-- 상단 -->
     <div class="flex flex-col gap-2">
       <!-- 기사님 이름 -->
@@ -37,20 +37,20 @@
         </button>
       </div>
       <!-- 오늘의 예약 -->
-      <div v-if="reservationTab === 'today'" class="overflow-y-auto max-h-[61vh]">
+      <div v-if="reservationTab === 'today'" class="">
         <!-- 남은 예약 / 전체 예약 -->
         <div>
           <p class="py-2 text-[14px] text-[#888888] font-bold text-right">
             남은 예약
             <span class="text-[#296af1]">{{ waitingReser }}건</span>
-            / 전체 {{ dataCustomer.length }}건
+            / 전체 {{ todayReservations.length }}건
           </p>
           <!-- 오늘의 예약 목록 -->
           <div
-            v-for="customer in dataCustomer"
+            v-for="customer in todayReservations"
             :key="customer.id"
             @click="goDetail(customer.id)"
-            class="p-4 rounded-2xl bg-white flex flex-col mb-3">
+            class="p-4 rounded-2xl flex flex-col mb-3 bg-[#f0faff]">
             <!-- 예약 시간 / 진행상태 -->
             <div class="flex justify-between">
               <p class="text-[#888888] font-bold">{{ customer.time }}</p>
@@ -68,7 +68,7 @@
                 <p class="px-2 rounded-full bg-[#dce7fb]">
                   <i class="fa-solid fa-location-dot text-[12px] text-[#092857]"></i>
                 </p>
-                <p class="ml-2 text-[14px] font-bold text-[#555555]">{{ customer.addr }}</p>
+                <p class="ml-2 text-[14px] font-bold text-[#555555]">{{ customer.address }}</p>
               </div>
               <!-- 이름 / 카페이름 -->
               <div class="flex items-center">
@@ -76,7 +76,7 @@
                   <i class="fa-solid fa-user text-[12px] text-[#092857]"></i>
                 </p>
                 <p class="ml-2 text-[14px] text-[#555555]">
-                  {{ customer.name }}({{ customer.cafename }})
+                  {{ customer.customerName }}({{ customer.cafeName }})
                 </p>
               </div>
               <!-- 모델명 -->
@@ -84,14 +84,14 @@
                 <p class="px-2 rounded-full bg-[#dce7fb]">
                   <i class="fa-solid fa-cube text-[12px] text-[#092857]"></i>
                 </p>
-                <p class="ml-2 text-[14px] text-[#555555]">{{ customer.model }}</p>
+                <p class="ml-2 text-[14px] text-[#555555]">{{ customer.iceMachineModel }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- 전체 예약 -->
-      <div v-if="reservationTab === 'all'" class="overflow-y-auto max-h-[61vh]">
+      <div v-if="reservationTab === 'all'">
         <!-- 날짜 선택 -->
         <!-- 월 선택 -->
         <div class="flex items-center justify-center gap-2 py-3">
@@ -122,12 +122,11 @@
         <!-- 전체 예약 목록 -->
         <div
           @click="goDetail(customer.id)"
-          v-if="selectedDate === todayDate"
-          v-for="customer in dataCustomer"
+          v-for="customer in selectDateReser"
+          v-if="selectDateReser.length"
           :key="customer.id"
-          class="p-4 rounded-2xl bg-white mb-3 grid grid-cols-2">
-          <!-- 왼쪽 목록 -->
-          <div class="flex flex-col">
+          class="p-4 rounded-2xl bg-[#f0faff] mb-3">
+          <div class="grid grid-cols-2">
             <!-- 시간 -->
             <div class="flex items-center mb-1">
               <p
@@ -147,28 +146,6 @@
                 {{ customer.time }} | {{ customer.status === "waiting" ? "예정" : "완료" }}
               </p>
             </div>
-            <!-- 장소 -->
-            <div class="flex items-center">
-              <p
-                class="px-2 rounded-full"
-                :class="
-                  customer.status === 'waiting'
-                    ? 'text-[#092857] font-bold bg-[#dce7fb]'
-                    : 'text-[#888888] bg-[#f1f1f1]'
-                ">
-                <i class="fa-solid fa-location-dot text-[12px]"></i>
-              </p>
-              <p
-                :class="
-                  customer.status === 'waiting' ? 'text-[#092857] font-bold' : 'text-[#888888]'
-                "
-                class="ml-2 text-[14px]">
-                {{ customer.addr }}
-              </p>
-            </div>
-          </div>
-          <!-- 오른쪽 목록 -->
-          <div class="flex flex-col">
             <!-- 이름 -->
             <div class="flex items-center mb-1">
               <p
@@ -183,27 +160,26 @@
               <p
                 :class="customer.status === 'waiting' ? 'text-[#092857]' : 'text-[#888888]'"
                 class="ml-2 text-[14px]">
-                {{ customer.name }}({{ customer.cafename }})
+                {{ customer.customerName }}({{ customer.cafeName }})
               </p>
             </div>
-
-            <!-- 모델명 -->
-            <div class="flex">
-              <p
-                class="px-2 rounded-full"
-                :class="
-                  customer.status === 'waiting'
-                    ? 'text-[#092857] font-bold bg-[#dce7fb]'
-                    : 'text-[#888888] bg-[#f1f1f1]'
-                ">
-                <i class="fa-solid fa-cube text-[12px]"></i>
-              </p>
-              <p
-                :class="customer.status === 'waiting' ? 'text-[#092857]' : 'text-[#888888]'"
-                class="ml-2 text-[14px]">
-                {{ customer.model }}
-              </p>
-            </div>
+          </div>
+          <!-- 장소 -->
+          <div class="flex items-center">
+            <p
+              class="px-2 rounded-full"
+              :class="
+                customer.status === 'waiting'
+                  ? 'text-[#092857] font-bold bg-[#dce7fb]'
+                  : 'text-[#888888] bg-[#f1f1f1]'
+              ">
+              <i class="fa-solid fa-location-dot text-[12px]"></i>
+            </p>
+            <p
+              :class="customer.status === 'waiting' ? 'text-[#092857] font-bold' : 'text-[#888888]'"
+              class="ml-2 text-[14px]">
+              {{ customer.address }}
+            </p>
           </div>
         </div>
         <!-- 오늘 날짜가 아니라면 안내 문구 표시 -->
@@ -222,17 +198,10 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const reservationTab = ref("today");
-// 더미데이터 불러오기
 const dataCustomer = ref(customerData);
 const dataWorker = ref(workerData);
 
-// 남은 예약 계산
-const waitingReser = computed(() => {
-  return dataCustomer.value.filter((c) => c.status === "waiting").length;
-});
-
 const today = new Date();
-// 오늘 날짜에 표시
 const todayDate = today.getDate();
 const todayDay = today.getDay();
 const currentYear = ref(today.getFullYear());
@@ -240,17 +209,45 @@ const currentMonth = ref(today.getMonth());
 const selectedDate = ref(todayDate);
 const selectedPeriod = ref(null);
 
-// 오늘 날짜
-const todayText = new Date().toLocaleDateString("ko-KR", {
+// 오늘 날짜 문자열 (YYYY-MM-DD)
+const todayString = today.toISOString().split("T")[0];
+
+// 오늘 날짜 표시
+const todayText = today.toLocaleDateString("ko-KR", {
   weekday: "long",
   year: "numeric",
   month: "long",
   day: "numeric",
 });
 
+// 주간 요일
 const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
-// 전달 다음달
+// 오늘 예약만 필터링
+const todayReservations = computed(() => {
+  return dataCustomer.value.filter((c) => c.reservationDate === todayString);
+});
+
+// 선택한 날짜별 예약 필터링
+const selectDateReser = computed(() => {
+  if (!selectedDate.value) return [];
+
+  // 로컬 기준으로 YYYY-MM-DD 문자열 생성
+  const date = new Date(currentYear.value, currentMonth.value, selectedDate.value);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const selectedDateString = `${year}-${month}-${day}`;
+
+  return dataCustomer.value.filter((c) => c.reservationDate === selectedDateString);
+});
+
+// 남은 예약 계산 (오늘)
+const waitingReser = computed(() => {
+  return todayReservations.value.filter((c) => c.status === "waiting").length;
+});
+
+// 달력 이전/다음 달
 const prevMonth = () => {
   if (currentMonth.value === 0) {
     currentMonth.value = 11;
@@ -259,7 +256,6 @@ const prevMonth = () => {
     currentMonth.value--;
   }
   selectedDate.value = null;
-  selectedPeriod.value = null;
 };
 
 const nextMonth = () => {
@@ -270,13 +266,12 @@ const nextMonth = () => {
     currentMonth.value++;
   }
   selectedDate.value = null;
-  selectedPeriod.value = null;
 };
 
-// 한 주의 날짜들
+// 이번 주 날짜
 const weekDates = computed(() => {
   const firstDayOfWeek = new Date(today);
-  firstDayOfWeek.setDate(todayDate - todayDay); // 이번 주 일요일 날짜
+  firstDayOfWeek.setDate(todayDate - todayDay); // 이번 주 일요일
 
   return Array.from({ length: 7 }, (_, i) => {
     const date = new Date(firstDayOfWeek);
@@ -288,7 +283,6 @@ const weekDates = computed(() => {
 // 날짜 선택
 const selectDate = (date) => {
   selectedDate.value = date;
-  // console.log("선택된 날짜:", date);
 };
 
 // 날짜별 클래스
@@ -308,10 +302,10 @@ const getDateClass = (date, index) => {
   ];
 };
 
-// 오늘의 예약에서 목록 클릭 시 그 예약 상세정보 페이지로 이동
+// 예약 상세페이지 이동
 const goDetail = (id) => {
-  const customer = dataCustomer.value.find((c) => c.id === id); // 클릭한 예약 찾기
-  if (!customer) return; // 혹시 데이터가 없으면 함수 종료
+  const customer = dataCustomer.value.find((c) => c.id === id);
+  if (!customer) return;
 
   if (customer.status === "waiting") {
     router.push({ name: "ReservationDetail", params: { id } });

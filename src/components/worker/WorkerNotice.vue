@@ -119,5 +119,12 @@ const notices = [
     icon: "fa-solid fa-dollar-sign",
     name: "MyPage",
   },
+  {
+    id: 7,
+    message: "새로운 리뷰가 있습니다!",
+    desc: "마이페이지에서 확인해주세요.",
+    icon: "fa-solid fa-thumbs-up",
+    name: "MyPage",
+  },
 ];
 </script>

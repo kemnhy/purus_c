@@ -145,7 +145,7 @@ onBeforeUnmount(() => {
 @use "../assets/styles/variables" as *;
 
 .process-wrap {
-  padding-bottom: $web-spacing;
+  padding: $web-spacing 0;
   .inner {
     // 타이틀
     .title {

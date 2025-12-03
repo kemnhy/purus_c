@@ -1,7 +1,7 @@
 <template>
   <!-- 메인비디오 배경 -->
   <!-- <video src="/public/images/main_video.mp4" muted autoplay loop></video> -->
-  <img src="/public/images/main_video.webp" alt="메인영상" class="main-video" />
+  <img src="/images/main_video.webp" alt="메인영상" class="main-video" />
   <div class="visual inner">
     <!-- 메인 비주얼 텍스트 -->
     <div class="text-box">
@@ -12,17 +12,17 @@
           v-for="(line, index) in visibleLine"
           :key="index"
           :class="{ fadeIn: activeLines[index] }"
-          :style="{ transitionDelay: `${index * 0.3}s` }"
-        >
+          :style="{ transitionDelay: `${index * 0.3}s` }">
           {{ line }}
         </li>
       </ul>
       <!-- CTA 버튼 -->
       <button class="btn" @click="goEstimate">무료 견적 알아보기</button>
     </div>
-    <!-- 스크롤 안내 문구 (웹에서만 보이게) -->
-    <p class="scroll" :class="{ animate: allVisible === false }">
-      스크롤하세요<span><i class="fa-solid fa-angle-down"></i></span>
+    <!-- 스크롤 안내 문구 (모든 텍스트 나온 후 표시) -->
+    <p class="scroll" :class="{ animate: allVisible === true }">
+      스크롤하세요
+      <span><i class="fa-solid fa-angle-down"></i></span>
     </p>
   </div>
 </template>
@@ -43,113 +43,49 @@ const router = useRouter();
 
 // 상태관리
 const currentIndex = ref(0); //현재 노출중인 문장 인덱스
-const wheelCount = ref(0); //휠 이벤트 횟수
 const visibleLine = ref([]); //화면에 표시되는 문장
 const allVisible = ref(false); //모든 문장 노출 완료 여부
 const activeLines = ref(Array(texts.length).fill(false)); //애니메이션 활성 상태
 let intervalId = null;
 
-//웹 - 스크롤 핸들러
-const handleScroll = async (e) => {
-  // 스크롤이 맨 위일 때만 작동
-  if (window.scrollY !== 0) return;
+// 자동 텍스트 애니메이션 시작
+const startTextAnimation = () => {
+  // 초기화
+  visibleLine.value = [];
+  activeLines.value = Array(texts.length).fill(false);
+  currentIndex.value = 0;
+  allVisible.value = false;
 
-  // 아래로 스크롤시 누적 카운트
-  if (e && e.deltaY > 0 && currentIndex.value < texts.length) {
-    e.preventDefault();
-    wheelCount.value++;
-  }
+  // setInterval - 0.5초 간격으로 한 줄씩 나오게
+  intervalId = setInterval(() => {
+    if (currentIndex.value < texts.length) {
+      const indexUpdate = currentIndex.value;
+      visibleLine.value.push(texts[indexUpdate]);
 
-  // 휠이 4번 돌때마다 문장 나오게
-  if (wheelCount.value >= 4) {
-    const index = currentIndex.value;
-    visibleLine.value.push(texts[index]);
+      nextTick(() => {
+        setTimeout(() => (activeLines.value[indexUpdate] = true), 20);
+      });
 
-    await nextTick();
-
-    // fadeIn 효과
-    setTimeout(() => {
-      activeLines.value[index] = true;
-    }, 10);
-
-    currentIndex.value++;
-    wheelCount.value = 0;
-  }
-
-  // 모든 문장이 나오면 스크롤 해제
-  if (currentIndex.value === texts.length && !allVisible.value) {
-    allVisible.value = true;
-    setTimeout(() => {
-      document.body.style.overflow = "";
-    }, 800);
-  }
+      currentIndex.value++;
+    } else {
+      allVisible.value = true;
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }, 500);
 };
 
-// 모바일 - interval 로 자동 텍스트 애니메이션
+// 마운트시 애니메이션 시작
 onMounted(() => {
-  const mobile = window.innerWidth <= 768;
-
-  if (mobile) {
-    // 초기화
-    visibleLine.value = [];
-    activeLines.value = Array(texts.length).fill(false);
-    currentIndex.value = 0;
-    allVisible.value = false;
-    document.body.style.overflow = "";
-
-    // setInterval - 0.5초 간격으로 한 줄씩 나오게
-    let index = 0;
-    intervalId = setInterval(() => {
-      if (currentIndex.value < texts.length) {
-        const indexUpdate = currentIndex.value;
-        visibleLine.value.push(texts[indexUpdate]);
-
-        nextTick(() => {
-          setTimeout(() => (activeLines.value[indexUpdate] = true), 20);
-        });
-
-        currentIndex.value++;
-      } else {
-        allVisible.value = true;
-        clearInterval(intervalId);
-        intervalId = null;
-      }
-    }, 500);
-  } else {
-    // web(wheel O)
-    // 뒤로가기로 돌아왔을때 스크롤 Y 값이 0으로 인식됨을 방지
-    nextTick(() => {
-      setTimeout(() => {
-        if (window.scrollY === 0) {
-          document.body.style.overflow = "hidden";
-          visibleLine.value = [];
-          activeLines.value = Array(texts.length).fill(false);
-          currentIndex.value = 0;
-          allVisible.value = false;
-        } else {
-          // 이미 스크롤이 내려가 있는 상태면 전부 보이게 처리
-          visibleLine.value = [...texts];
-          activeLines.value = Array(texts.length).fill(true);
-          currentIndex.value = texts.length;
-          allVisible.value = true;
-        }
-        // 스크롤 위치 확인 후 휠리스너 추가
-        window.addEventListener("wheel", handleScroll, { passive: false });
-      }, 0);
-    });
-  }
+  startTextAnimation();
 });
 
 // 언마운트시 리스너 해제
 onUnmounted(() => {
-  window.removeEventListener("wheel", handleScroll);
-
   if (intervalId) {
     clearInterval(intervalId);
     intervalId = null;
   }
-  document.body.style.overflow = "";
-  document.documentElement.style.overflow = "";
 });
 
 // go estimate
@@ -211,9 +147,19 @@ const goEstimate = () => {
     .btn {
       cursor: pointer;
       font-weight: bold;
+      background-color: #296af1;
+      color: #fff;
+      border: transparent;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 25px;
+      animation: btnBlink 1.5s ease-in-out infinite;
+      &:hover {
+        animation-play-state: paused;
+      }
     }
   }
-  // 웹용 스크롤 안내 문구
+  // 스크롤 안내 문구
   .scroll {
     transition: all 0.3s ease;
     font-size: $small-txt;
@@ -240,6 +186,20 @@ const goEstimate = () => {
   }
   100% {
     transform: translate3d(-50%, 30%, 0);
+  }
+}
+// 버튼 색상 반전 애니메이션 키프레임
+@keyframes btnBlink {
+  0%,
+  100% {
+    background-color: #296af1;
+    color: #fff;
+    border-color: #296af1;
+  }
+  50% {
+    background-color: #fff;
+    color: #296af1;
+    border-color: #296af1;
   }
 }
 // responsive

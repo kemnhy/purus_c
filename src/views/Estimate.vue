@@ -22,38 +22,86 @@
         <div class="esti_select">
           <!-- 브랜드 선택 -->
           <div class="esti_brand">
-            <p>
-              제빙기의 브랜드를 선택해주세요.
-              <span>(필수)</span>
-            </p>
-            <div>
+            <div class="select_header">
+              <p>
+                제빙기의 브랜드를 선택해주세요.
+                <span>(필수)</span>
+              </p>
+              <button 
+                v-if="selectedIndex !== null && !isBrandOpen" 
+                @click="isBrandOpen = true"
+                class="edit_btn">
+                변경
+              </button>
+            </div>
+            
+            <!-- 선택된 항목만 표시 -->
+            <div v-if="selectedIndex !== null && !isBrandOpen" class="selected_item">
+              <label class="brand_list active">
+                <input type="radio" name="brand" checked disabled />
+                {{ brandList[selectedIndex].name }}
+              </label>
+            </div>
+            
+            <!-- 전체 목록 표시 -->
+            <div v-else>
               <label
                 v-for="(brand, index) in brandList"
                 :key="index"
                 :class="{ active: selectedIndex === index }"
                 class="brand_list">
-                <input type="radio" name="brand" :value="index" v-model="selectedIndex" />
+                <input 
+                  type="radio" 
+                  name="brand" 
+                  :value="index" 
+                  v-model="selectedIndex"
+                  @change="onBrandChange" />
                 {{ brand.name }}
               </label>
             </div>
           </div>
+
           <!-- 용량 선택 -->
           <div v-if="selectedIndex !== null" class="esti_size">
-            <p>
-              제빙기의 용량을 선택해주세요.
-              <span>(필수)</span>
-            </p>
-            <div>
+            <div class="select_header">
+              <p>
+                제빙기의 용량을 선택해주세요.
+                <span>(필수)</span>
+              </p>
+              <button 
+                v-if="selectedI !== null && !isSizeOpen" 
+                @click="isSizeOpen = true"
+                class="edit_btn">
+                변경
+              </button>
+            </div>
+            
+            <!-- 선택된 항목만 표시 -->
+            <div v-if="selectedI !== null && !isSizeOpen" class="selected_item">
+              <label class="size_list active">
+                <input type="radio" name="size" checked disabled />
+                {{ sizeList[selectedI].size }}
+              </label>
+            </div>
+            
+            <!-- 전체 목록 표시 -->
+            <div v-else>
               <label
                 v-for="(size, index) in sizeList"
                 :key="index"
                 :class="{ active: selectedI === index }"
                 class="size_list">
-                <input type="radio" name="size" :value="index" v-model="selectedI" />
+                <input 
+                  type="radio" 
+                  name="size" 
+                  :value="index" 
+                  v-model="selectedI"
+                  @change="onSizeChange" />
                 {{ size.size }}
               </label>
             </div>
           </div>
+
           <!-- 모델 이름 입력 -->
           <div v-if="selectedI !== null" class="esti_model">
             <p>
@@ -92,6 +140,7 @@ import Side_menu from "@/components/Side_menu.vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+
 // 브랜드 목록
 const brandList = [
   { name: "카이저(KAISER)", price: 90000 },
@@ -101,6 +150,8 @@ const brandList = [
   { name: "그 외", price: "유선 상담" },
 ];
 const selectedIndex = ref(null);
+const isBrandOpen = ref(true); // 브랜드 목록 열림/닫힘 상태
+
 const sizeList = [
   { size: "~ 20kg", price: 0 },
   { size: "21 ~ 30kg", price: 10000 },
@@ -108,6 +159,21 @@ const sizeList = [
   { size: "51kg ~", price: 30000 },
 ];
 const selectedI = ref(null);
+const isSizeOpen = ref(true); // 용량 목록 열림/닫힘 상태
+
+// 브랜드 선택 시 목록 닫기
+const onBrandChange = () => {
+  isBrandOpen.value = false;
+  // 브랜드 변경 시 용량과 모델명 초기화
+  selectedI.value = null;
+  isSizeOpen.value = true;
+  modelName.value = "";
+};
+
+// 용량 선택 시 목록 닫기
+const onSizeChange = () => {
+  isSizeOpen.value = false;
+};
 
 // 게이지 계산 (단계별로 3단계)
 const gaugeWidth = computed(() => {
@@ -206,14 +272,14 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   padding-bottom: 20px;
 }
-// 브랜드 선택, 용량 선택
-.esti_brand,
-.esti_size {
-  // background-color: aliceblue;
+
+// 선택 헤더 (제목 + 변경 버튼)
+.select_header {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin-bottom: 50px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  
   p {
     font-size: $esti-medium-txt;
     span {
@@ -221,32 +287,82 @@ onBeforeUnmount(() => {
       color: $point-color;
     }
   }
-  div {
+}
+
+.edit_btn {
+  padding: 8px 20px;
+  background-color: #fff;
+  border: 1px solid $point-color;
+  color: $point-color;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: $point-color;
+    color: #fff;
+  }
+}
+
+// 선택된 항목 표시
+.selected_item {
+  margin-bottom: 30px;
+  
+  .brand_list,
+  .size_list {
+    input {
+      pointer-events: none;
+    }
+  }
+}
+
+// 브랜드 선택, 용량 선택
+.esti_brand,
+.esti_size {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  
+  > div:not(.select_header) {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
+  
   .brand_list,
   .size_list {
     font-size: $small-txt;
     padding: 20px;
     border: 1px solid $border-color;
     border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
     input {
       margin-right: 15px;
     }
+    
     &.active {
       color: $point-color;
       font-weight: bold;
       border: 1px solid $point-color;
       background-color: rgba($sub-color, 0.5);
     }
+    
+    &:hover:not(.active) {
+      border-color: $point-color;
+      background-color: rgba($sub-color, 0.2);
+    }
   }
 }
+
 // 모델명 입력
 .esti_model {
   p {
     font-size: $esti-medium-txt;
+    margin-bottom: 15px;
     span {
       font-size: 16px;
       color: $point-color;
@@ -256,7 +372,6 @@ onBeforeUnmount(() => {
   span {
     color: $border-color;
     font-size: 16px;
-    margin-top: 15px;
     display: block;
   }
   input {
@@ -305,6 +420,7 @@ onBeforeUnmount(() => {
     margin: auto;
     width: 100%;
     font-weight: 600;
+    cursor: pointer;
     &.active {
       background-color: $point-color;
       color: #fff;
@@ -334,20 +450,32 @@ onBeforeUnmount(() => {
   .esti_gauge {
     height: 7px;
   }
-  // 브랜드 선택, 용량 선택
-  .esti_brand,
-  .esti_size {
-    gap: 10px;
-    margin-bottom: 25px;
+  
+  .select_header {
+    margin-bottom: 10px;
+    
     p {
       font-size: 16px;
       span {
         font-size: 12px;
       }
     }
-    div {
+  }
+  
+  .edit_btn {
+    padding: 6px 15px;
+    font-size: 12px;
+  }
+  
+  // 브랜드 선택, 용량 선택
+  .esti_brand,
+  .esti_size {
+    margin-bottom: 25px;
+    
+    > div:not(.select_header) {
       gap: 10px;
     }
+    
     .brand_list,
     .size_list {
       font-size: 16px;
@@ -357,9 +485,11 @@ onBeforeUnmount(() => {
       }
     }
   }
+  
   .esti_model {
     p {
       font-size: 16px;
+      margin-bottom: 10px;
       span {
         font-size: 12px;
       }
