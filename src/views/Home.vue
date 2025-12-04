@@ -6,7 +6,7 @@
       <Side_menu />
       <Visual />
     </div>
-    <img src="/images/thumb.png" alt="썸네일">
+    <!-- <img src="/images/thumb.png" alt="썸네일"> -->
     <Care_reason />
     <Main_banner />
     <Service />
